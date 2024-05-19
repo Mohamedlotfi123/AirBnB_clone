@@ -2,6 +2,7 @@
 """ BaseModel Class """
 from datetime import datetime
 from uuid import uuid4
+import storage
 
 
 class BaseModel():
@@ -39,6 +40,8 @@ class BaseModel():
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+        if self not in kwargs:
+            storage.new(self)
 
     def __str__(self):
         """
@@ -53,6 +56,7 @@ class BaseModel():
         the current datetime
         """
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """
