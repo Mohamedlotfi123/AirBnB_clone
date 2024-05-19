@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """ BaseModel Class """
-
-
 from datetime import datetime
 from uuid import uuid4
+
+
 class BaseModel():
     """
     BaseModel class that defines all common attributes/methods
