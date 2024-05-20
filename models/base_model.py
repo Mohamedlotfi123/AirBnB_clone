@@ -24,19 +24,18 @@ class BaseModel():
         """
         initialization method
         """
-        if len(kwargs) > 0:
-            Format = "%Y-%m-%dT%H:%M:%S.%f"
-            self.id = kwargs.get('id')
-            self.name = kwargs.get('name')
-            self.my_number = kwargs.get('my_number')
-            c = kwargs.get('created_at')
-            self.created_at = datetime.strptime(c, Format)
-            c = kwargs.get('updated_at')
-            self.updated_at = datetime.strptime(c, Format)
-        else:
-            self.id = str(uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+        Format = "%Y-%m-%dT%H:%M:%S.%f"
+        self.id = str(uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+        if len(kwargs) != 0:
+            for k, v in kwargs.items():
+                if k == '__class__':
+                    continue
+                if k == "created_at" or k == "updated_at":
+                    self.__dict__[k] = datetime.strptime(v, Format)
+                else:
+                    self.__dict__[k] = v
 
     def __str__(self):
         """

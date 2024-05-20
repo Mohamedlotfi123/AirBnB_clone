@@ -25,7 +25,7 @@ class FileStorage():
 
     def all(self):
         """ function returns dictionary __objects. """
-        return self.__objects
+        return FileStorage.__objects
 
     def new(self, obj):
         """
@@ -36,19 +36,16 @@ class FileStorage():
             obj: object of a class.
         """
         key = f"{obj.__class__.__name__}.{obj.__dict__['id']}"
-        dic = obj.__dict__.copy()
-        created_at = dic.get("created_at")
-        updated_at = dic.get("updated_at")
-        dic["created_at"] = created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        dic["updated_at"] = updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        self.__objects[key] = dic
+        FileStorage.__objects[key] = obj
 
     def save(self):
         """
         function serializes the __objects to JSON file.
         """
-        with open(self.__file_path, mode="w+", encoding="utf-8") as f:
-            f.write(json.dumps(self.__objects))
+        objd = FileStorage.__objects
+        objdict = {obj: objd[obj].to_dict() for obj in objd.keys()}
+        with open(FileStorage.__file_path, "w") as f:
+            json.dump(objdict, f)
 
     def reload(self):
         """
@@ -56,7 +53,11 @@ class FileStorage():
         if the JSON file (__file_path)
         """
         try:
-            with open(self.__file_path, mode="r", encoding="utf-8") as f:
-                json.loads(f.read())
+            with open(Filestorage.__file_path) as f:
+                dic = json.loads(f)
+                for obj in dic.values():
+                    cls_name = obj["__class__"]
+                    del obj["__class__"]
+                    self.new(eval(cls_name)(**obj))
         except Exception:
             pass
