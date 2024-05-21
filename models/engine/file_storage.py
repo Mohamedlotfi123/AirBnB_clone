@@ -2,6 +2,7 @@
 """ FileStorage Class """
 from datetime import datetime
 import json
+from models.base_model import BaseModel
 
 
 class FileStorage():
@@ -25,7 +26,7 @@ class FileStorage():
 
     def all(self):
         """ function returns dictionary __objects. """
-        return FileStorage.__objects
+        return self.__objects
 
     def new(self, obj):
         """
@@ -42,10 +43,13 @@ class FileStorage():
         """
         function serializes the __objects to JSON file.
         """
-        objd = FileStorage.__objects
-        objdict = {obj: objd[obj].to_dict() for obj in objd.keys()}
-        with open(FileStorage.__file_path, "w") as f:
-            json.dump(objdict, f)
+        Format = "%Y-%m-%dT%H:%M:%S.%f"
+        dic = {}
+        for key, obj in self.__objects.items():
+            self.__objects[key] = obj.to_dict()
+        json_string = json.dumps(self.__objects)
+        with open(self.__file_path, "w") as f:
+            f.write(json_string)
 
     def reload(self):
         """
@@ -53,11 +57,10 @@ class FileStorage():
         if the JSON file (__file_path)
         """
         try:
-            with open(Filestorage.__file_path) as f:
-                dic = json.loads(f)
-                for obj in dic.values():
-                    cls_name = obj["__class__"]
-                    del obj["__class__"]
-                    self.new(eval(cls_name)(**obj))
+            with open(self.__file_path) as f:
+                json_string = f.read()
+            dic = json.loads(json_string)
+            for k, v in dic.items():
+                self.__objects[k] = BaseModel(**v)
         except Exception:
             pass

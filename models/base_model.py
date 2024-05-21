@@ -2,6 +2,7 @@
 """ BaseModel Class """
 from datetime import datetime
 from uuid import uuid4
+import models
 
 
 class BaseModel():
@@ -36,6 +37,8 @@ class BaseModel():
                     self.__dict__[k] = datetime.strptime(v, Format)
                 else:
                     self.__dict__[k] = v
+        else:
+            models.storage.new(self)
 
     def __str__(self):
         """
@@ -50,6 +53,7 @@ class BaseModel():
         the current datetime
         """
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         """
@@ -59,5 +63,5 @@ class BaseModel():
         dic = self.__dict__.copy()
         dic["created_at"] = self.created_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
         dic["updated_at"] = self.updated_at.strftime("%Y-%m-%dT%H:%M:%S.%f")
-        dic["__class__"] = "BaseModel"
+        dic["__class__"] = self.__class__.__name__
         return dic
