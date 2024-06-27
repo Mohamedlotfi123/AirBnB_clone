@@ -37,7 +37,7 @@ class FileStorage():
             obj: object of a class.
         """
         key = f"{obj.__class__.__name__}.{obj.__dict__['id']}"
-        FileStorage.__objects[key] = obj
+        self.__objects[key] = obj
 
     def save(self):
         """
@@ -58,9 +58,9 @@ class FileStorage():
         """
         try:
             with open(self.__file_path) as f:
-                json_string = f.read()
-            dic = json.loads(json_string)
-            for k, v in dic.items():
-                self.__objects[k] = BaseModel(**v)
+                dic = json.loads(f)
+                print(dic)
+            for v in dic.values():
+                self.new(BaseModel(**v))
         except Exception:
             pass
