@@ -46,8 +46,8 @@ class FileStorage():
         Format = "%Y-%m-%dT%H:%M:%S.%f"
         dic = {}
         for key, obj in self.__objects.items():
-            self.__objects[key] = obj.to_dict()
-        json_string = json.dumps(self.__objects)
+            dic[key] = obj.to_dict()
+        json_string = json.dumps(dic)
         with open(self.__file_path, "w") as f:
             f.write(json_string)
 
@@ -58,9 +58,9 @@ class FileStorage():
         """
         try:
             with open(self.__file_path) as f:
-                dic = json.loads(f)
-                print(dic)
-            for v in dic.values():
+                json_string = f.read()
+            Dict = json.loads(json_string)
+            for v in Dict.values():
                 self.new(BaseModel(**v))
         except Exception:
             pass

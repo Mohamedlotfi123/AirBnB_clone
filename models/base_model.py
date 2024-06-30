@@ -34,10 +34,7 @@ class BaseModel():
                 if k == '__class__':
                     continue
                 if k == "created_at" or k == "updated_at":
-                    #self.__dict__[k] = datetime.strptime(v, Format)
                     v = datetime.strptime(v, Format)
-                #else:
-                    #self.__dict__[k] = v
                 setattr(self, k, v)
         else:
             models.storage.new(self)
