@@ -3,6 +3,7 @@
 from datetime import datetime
 import json
 from models.base_model import BaseModel
+from models.user import User
 
 
 class FileStorage():
@@ -43,7 +44,6 @@ class FileStorage():
         """
         function serializes the __objects to JSON file.
         """
-        Format = "%Y-%m-%dT%H:%M:%S.%f"
         dic = {}
         for key, obj in self.__objects.items():
             dic[key] = obj.to_dict()
@@ -61,6 +61,9 @@ class FileStorage():
                 json_string = f.read()
             Dict = json.loads(json_string)
             for v in Dict.values():
-                self.new(BaseModel(**v))
+                if v['__class__'] == "BaseModel":
+                    self.new(BaseModel(**v))
+                else:
+                    self.new(User(**v))
         except Exception:
             pass

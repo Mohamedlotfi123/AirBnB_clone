@@ -44,7 +44,8 @@ class BaseModel():
         print [<class name>] (<self.id>) <self.__dict__> when you try
         to print instance of a class
         """
-        return f"[BaseModel] ({self.id}) {self.__dict__}"
+        name = f"{self.__class__.__name__}"
+        return f"[{name}] ({self.id}) {self.__dict__}"
 
     def save(self):
         """

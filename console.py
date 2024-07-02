@@ -4,6 +4,7 @@ import cmd
 import models
 from datetime import datetime
 from models.base_model import BaseModel
+from models.user import User
 
 
 class HBNBCommand(cmd.Cmd):
@@ -11,7 +12,7 @@ class HBNBCommand(cmd.Cmd):
     Entry point of the command interpreter.
     """
     prompt = "(hbnb) "
-    names = ["BaseModel"]
+    names = ["BaseModel", "User"]
 
     def do_quit(self, line):
         """
@@ -40,7 +41,10 @@ class HBNBCommand(cmd.Cmd):
         elif class_name not in self.names:
             print("** class doesn't exist **")
         else:
-            instance = BaseModel()
+            if class_name == "BaseModel":
+                instance = BaseModel()
+            else:
+                instance = User()
             models.storage.new(instance)
             models.storage.save()
             print(instance.id)
