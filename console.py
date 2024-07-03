@@ -57,10 +57,6 @@ class HBNBCommand(cmd.Cmd):
             for key, Class in self.Classes.items():
                 if class_name == key:
                     instance = Class()
-            #if class_name == "BaseModel":
-             #   instance = BaseModel()
-            #else:
-            #    instance = Class()
             models.storage.new(instance)
             models.storage.save()
             print(instance.id)
@@ -104,6 +100,7 @@ class HBNBCommand(cmd.Cmd):
                 print("** no instance found **")
             else:
                 all_objs.pop(class_id)
+                models.storage.save()
 
     def do_all(self, Args):
         """

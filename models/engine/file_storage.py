@@ -76,11 +76,7 @@ class FileStorage():
             Dict = json.loads(json_string)
             for v in Dict.values():
                 for key, Class in Classes.items():
-                    if v["__class__"] == key:
+                    if v["__class__"] == key :
                         self.new(Class(**v))
-                #if v['__class__'] == "BaseModel":
-                 #   self.new(BaseModel(**v))
-                #else:
-                 #   self.new(User(**v))
         except Exception:
             pass
