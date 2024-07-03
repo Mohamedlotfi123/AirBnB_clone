@@ -4,6 +4,11 @@ from datetime import datetime
 import json
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
 
 
 class FileStorage():
@@ -56,14 +61,26 @@ class FileStorage():
         function deserializes the JSON file to __objects, but only
         if the JSON file (__file_path)
         """
+        Classes = {
+                "BaseModel": BaseModel,
+                "User": User,
+                "State": State,
+                "City": City,
+                "Place": Place,
+                "Amenity": Amenity,
+                "Review": Review
+                }
         try:
             with open(self.__file_path) as f:
                 json_string = f.read()
             Dict = json.loads(json_string)
             for v in Dict.values():
-                if v['__class__'] == "BaseModel":
-                    self.new(BaseModel(**v))
-                else:
-                    self.new(User(**v))
+                for key, Class in Classes.items():
+                    if v["__class__"] == key:
+                        self.new(Class(**v))
+                #if v['__class__'] == "BaseModel":
+                 #   self.new(BaseModel(**v))
+                #else:
+                 #   self.new(User(**v))
         except Exception:
             pass

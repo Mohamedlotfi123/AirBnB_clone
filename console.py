@@ -5,6 +5,11 @@ import models
 from datetime import datetime
 from models.base_model import BaseModel
 from models.user import User
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -12,7 +17,15 @@ class HBNBCommand(cmd.Cmd):
     Entry point of the command interpreter.
     """
     prompt = "(hbnb) "
-    names = ["BaseModel", "User"]
+    Classes = {
+            "BaseModel": BaseModel,
+            "User": User,
+            "State": State,
+            "City": City,
+            "Place": Place,
+            "Amenity": Amenity,
+            "Review": Review
+            }
 
     def do_quit(self, line):
         """
@@ -38,13 +51,16 @@ class HBNBCommand(cmd.Cmd):
         """
         if not class_name:
             print("** class name missing **")
-        elif class_name not in self.names:
+        elif class_name not in self.Classes.keys():
             print("** class doesn't exist **")
         else:
-            if class_name == "BaseModel":
-                instance = BaseModel()
-            else:
-                instance = User()
+            for key, Class in self.Classes.items():
+                if class_name == key:
+                    instance = Class()
+            #if class_name == "BaseModel":
+             #   instance = BaseModel()
+            #else:
+            #    instance = Class()
             models.storage.new(instance)
             models.storage.save()
             print(instance.id)
@@ -56,7 +72,7 @@ class HBNBCommand(cmd.Cmd):
         arg_list = Args.split()
         if len(arg_list) == 0:
             print("** class name missing **")
-        elif arg_list[0] not in self.names:
+        elif arg_list[0] not in self.Classes.keys():
             print("** class doesn't exist **")
         elif len(arg_list) == 1:
             print("** instance id missing **")
@@ -76,7 +92,7 @@ class HBNBCommand(cmd.Cmd):
         arg_list = Args.split()
         if len(arg_list) == 0:
             print("** class name missing **")
-        elif arg_list[0] not in self.names:
+        elif arg_list[0] not in self.Classes.keys():
             print("** class doesn't exist **")
         elif len(arg_list) == 1:
             print("** instance id missing **")
@@ -93,7 +109,7 @@ class HBNBCommand(cmd.Cmd):
         """
         All command prints string representation of all instaces.
         """
-        if Args and Args not in self.names:
+        if Args and Args not in self.Classes.keys():
             print("** class doesn't exist **")
         else:
             all_objs = models.storage.all()
@@ -108,7 +124,7 @@ class HBNBCommand(cmd.Cmd):
         list_len = len(arg_list)
         if list_len == 0:
             print("** class name missing **")
-        elif arg_list[0] not in self.names:
+        elif arg_list[0] not in self.Classes.keys():
             print("** class doesn't exist **")
         elif list_len == 1:
             print("** instance id missing **")
