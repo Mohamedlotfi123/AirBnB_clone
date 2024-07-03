@@ -105,16 +105,16 @@ class HBNBCommand(cmd.Cmd):
         Update command update instance
         """
         arg_list = Args.split()
-        l = len(arg_list)
-        if l == 0:
+        list_len = len(arg_list)
+        if list_len == 0:
             print("** class name missing **")
         elif arg_list[0] not in self.names:
             print("** class doesn't exist **")
-        elif l == 1:
+        elif list_len == 1:
             print("** instance id missing **")
-        elif l == 2:
+        elif list_len == 2:
             print("** attribute name missing **")
-        elif l == 3:
+        elif list_len == 3:
             print("** value missing **")
         else:
             Format = "%Y-%m-%dT%H:%M:%S.%f"
@@ -129,6 +129,7 @@ class HBNBCommand(cmd.Cmd):
                 elif arg_list[2] == "my_number":
                     arg_list[3] = int(arg_list[3])
                 setattr(all_objs[class_id], arg_list[2], arg_list[3])
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
